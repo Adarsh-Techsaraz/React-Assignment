@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 
-export default function ProductDetails({updateModel, productDetails}) {
-    const closeModel = ()=>{
-        updateModel(false)
-    }
+export default function ProductDetails({data}) {
+    const {id}=useParams()
+    console.log(id)
+    const [productDetails, setProductDetails] = useState([])
+    useEffect(()=>{
+      console.log(data.products)
+      const filterData = data.products?.filter((value, i)=>i==id)
+      console.log(filterData)
+      setProductDetails(filterData)
+    },[])
     return (
-    <div class="main-container">
+      <>
+      {productDetails.length<1 &&<div>loading</div>}
+      {productDetails.length>0 &&(
+        <div class="main-container">
         {productDetails.map((v,i)=>(
             <div class="model-card">
                 <div class="model-img-container">
@@ -27,10 +37,14 @@ export default function ProductDetails({updateModel, productDetails}) {
                         <p class="card-text"><span>Rating : </span>{v.rating}</p>
                       </div>
                     </div>
-                    <button class="btn btn-primary" onClick={() => closeModel()}>Close</button>
+                    <button class="btn btn-primary">Back</button>
           </div>
         </div>
       ))}
     </div>
+      )}
+      
+      </>
+    
   )
 }
