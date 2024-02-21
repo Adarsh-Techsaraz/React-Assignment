@@ -1,38 +1,51 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import ProductDetails from './ProductDetails';
-import { BrowserRouter, Route, Routes, createBrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes, createBrowserRouter } from 'react-router-dom';
 import ProductCard from './component/ProductCard';
+import Header from './Common/Header';
 
 function App() {
+  //const localData = JSON.parse(localStorage.getItem('data'))
   const [data,setData] = useState([])
-  const [openModel, setOpenModel] = useState(false)
-  const [productDetails, setProductDetails] = useState([])
+  const [cartProduct, setCartProduct]= useState([])
   useEffect(()=>{
-    fetch('https://dummyjson.com/products')
+    if(!localStorage.getItem('data')){
+      fetch('https://dummyjson.com/products')
     .then((res=>res.json()))
-    .then(data=>setData(data))
+    .then(data=>{
+      localStorage.setItem('data', JSON.stringify(data.products))
+      setData(data.products)
+      })
     .catch(err=>console.log(err))
+    }else{
+      setData(JSON.parse(localStorage.getItem('data')))
+    }
+    
   },[])
-  /*useEffect(()=>{
-    console.log(productDetails)
-  },[data])*/
-  const handelOpenModel=(i)=>{
-    setOpenModel(true)
-    const filterData = data.products.filter((value,index) => index === i)
-    setProductDetails(filterData)
+  const displayData = (toDisplay)=>{
+    const filterData = toDisplay===''? data : data?.filter((value,i)=> value.title.includes(toDisplay))
+    console.log(filterData)
+    setData(filterData)
   }
-  
+  useEffect(()=>{
+    console.log(cartProduct)
+  },[cartProduct])
+  const setCartItems = (e)=>{
+    console.log(e)
+  }
   return (
     <>
     {/* {openModel && <ProductDetails updateModel ={(flag)=>setOpenModel(flag)} productDetails={productDetails}/>} */}
-    <BrowserRouter>
+    <Header prodToSearch={(e)=>displayData(e)}/>
+    
+    
       <Routes>
         <Route path='/' element={<ProductCard data={data}/>}/>
         <Route path='*' element={<div>This page is not found</div>}/>
-        <Route path='/ProductDetails/:id' element={<ProductDetails productDetails={productDetails} data={data}/>}/>
+        <Route path='/ProductDetails/:id' element={<ProductDetails data={data} addToCart={(e)=>setCartItems(e)}/>}/>
       </Routes>
-    </BrowserRouter>
+    
     </>
   );
 }

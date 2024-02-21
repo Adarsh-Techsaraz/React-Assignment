@@ -12,6 +12,45 @@
     margin: 25px;
     justify-content:center;
 }
+.nav-container{
+  width: 100%;
+  background: #1c1b19;
+  padding: 25px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.menu-bar ul li {
+  display: inline-block;
+  margin: 0 15px;
+}
+.menu-bar ul{
+  margin: auto;
+}
+.menu-bar li{
+  color: white;
+  font-size: 25px;
+  text-transform: uppercase;
+  display: block;
+  text-decoration: none;
+}
+.search-container{
+  display: flex;
+}
+.input{
+  flex-basis: 80%;
+  padding-left: 25px;
+  border: none;
+  font-size: 25px;
+}
+.search-icon-div{
+  flex-basis: 20%;
+  background: #7f8585;
+}
+.search-icon-div img{
+  display: block;
+  margin: auto;
+}
 .card{
     height: 600px;
     width: 400px;
@@ -85,6 +124,11 @@ p{
   flex-basis: 45%;
   text-align: left;
   margin-bottom: 1rem;
+}
+.btn-div{
+  width: 400px;
+  display: flex;
+  justify-content: space-around;
 }
 .App {
   text-align: center;

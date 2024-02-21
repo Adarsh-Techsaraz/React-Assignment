@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import CustomCarousel from './Common/CustomCarousel';
 
 
-export default function ProductDetails({data}) {
+export default function ProductDetails({data, addToCart }) {
     const {id}=useParams()
-    console.log(id)
     const [productDetails, setProductDetails] = useState([])
     useEffect(()=>{
-      console.log(data.products)
-      const filterData = data.products?.filter((value, i)=>i==id)
-      console.log(filterData)
+      const filterData = data?.filter((value, i)=>i==id)
+      //console.log(filterData)
       setProductDetails(filterData)
+      //console.log(productDetails)
     },[])
     return (
       <>
-      {productDetails.length<1 &&<div>loading</div>}
+      {productDetails.length===0 &&<div>loading</div>}
       {productDetails.length>0 &&(
         <div class="main-container">
         {productDetails.map((v,i)=>(
             <div class="model-card">
-                <div class="model-img-container">
-                    <img class="card-img-top" src={v.thumbnail} alt="Card image"/>
-                </div>
+                <CustomCarousel imageUrl={v.images}/>
                 <div class="model-card-body">
                     <h3 class="card-title">{v.brand}</h3>
                     <h4 class="card-title">{v.title}</h4>
@@ -35,9 +33,17 @@ export default function ProductDetails({data}) {
                         <p class="card-text"><span>Discounted Price : Rs. </span>{Math.round((v.price-((v.price*v.discountPercentage)/100))*100)/100}</p>
                         <p class="card-text"><span>Stock : </span>{v.stock}</p>
                         <p class="card-text"><span>Rating : </span>{v.rating}</p>
+                        <p class="card-text">Quantity : <button class="btn btn-primary">-</button><span> 0 </span><button class="btn btn-primary">+</button></p>
                       </div>
                     </div>
-                    <button class="btn btn-primary">Back</button>
+                    <div class="btn-div">
+                      <Link to = "/">
+                        <button class="btn btn-primary">Back</button>
+                      </Link>
+                        <button class="btn btn-primary" onClick={()=>addToCart(v)}>Add To Cart</button>
+                    </div>
+                    
+                    
           </div>
         </div>
       ))}
