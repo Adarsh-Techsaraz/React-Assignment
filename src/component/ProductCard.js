@@ -6,7 +6,7 @@ export default function ProductCard({data}) {
 
   return (
       <>
-        {data.length===0 ? <div>Loading</div> : (<div className="App">
+        <div className="App">
           {data?.map((v,i)=>(
             <div class="card">
               <div class="img-container">
@@ -23,8 +23,7 @@ export default function ProductCard({data}) {
               </div>
             </div>
           ))}
-        </div>)
-        }
+        </div>
         
       </>
       

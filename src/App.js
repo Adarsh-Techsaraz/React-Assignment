@@ -4,6 +4,8 @@ import ProductDetails from './ProductDetails';
 import { BrowserRouter, Outlet, Route, Routes, createBrowserRouter } from 'react-router-dom';
 import ProductCard from './component/ProductCard';
 import Header from './Common/Header';
+import { MyContext } from './MyContext';
+import CartProduct from './component/CartProduct';
 
 function App() {
   //const localData = JSON.parse(localStorage.getItem('data'))
@@ -14,8 +16,12 @@ function App() {
       fetch('https://dummyjson.com/products')
     .then((res=>res.json()))
     .then(data=>{
-      localStorage.setItem('data', JSON.stringify(data.products))
-      setData(data.products)
+      const modifyData = data.products.map(v => {
+        const discountedPrice = Number((v.price-((v.price*v.discountPercentage)/100)).toFixed(2))
+        return {...v, discountedPrice}
+      })
+      localStorage.setItem('data', JSON.stringify(modifyData))
+      setData(modifyData)
       })
     .catch(err=>console.log(err))
     }else{
@@ -24,27 +30,31 @@ function App() {
     
   },[])
   const displayData = (toDisplay)=>{
-    const filterData = toDisplay===''? data : data?.filter((value,i)=> value.title.includes(toDisplay))
-    console.log(filterData)
+    const filterData = toDisplay===''? data : data?.filter((value,i)=> value.title.includes(toDisplay)||value.brand.includes(toDisplay))
+    //console.log(filterData)
     setData(filterData)
   }
   useEffect(()=>{
-    console.log(cartProduct)
+    //console.log(cartProduct)
+    localStorage.setItem('CartData', JSON.stringify(cartProduct))
   },[cartProduct])
-  const setCartItems = (e)=>{
-    console.log(e)
-  }
+  
   return (
     <>
+    <MyContext.Provider value={{data, setData, cartProduct, setCartProduct}}>
     {/* {openModel && <ProductDetails updateModel ={(flag)=>setOpenModel(flag)} productDetails={productDetails}/>} */}
-    <Header prodToSearch={(e)=>displayData(e)}/>
-    
-    
+    {data.length===0 ? <div>Loading</div> : (<>
+      <Header prodToSearch={(e)=>displayData(e)}/>
       <Routes>
         <Route path='/' element={<ProductCard data={data}/>}/>
         <Route path='*' element={<div>This page is not found</div>}/>
-        <Route path='/ProductDetails/:id' element={<ProductDetails data={data} addToCart={(e)=>setCartItems(e)}/>}/>
+        <Route path='/ProductDetails/:id' element={<ProductDetails data={data} addToCart={(e)=>setCartProduct([...cartProduct, e])}/>}/>
+        <Route path='/CartProduct' element={<CartProduct/>}/> 
       </Routes>
+      
+      </>
+    )}
+    </MyContext.Provider>
     
     </>
   );
