@@ -130,6 +130,39 @@ p{
   display: flex;
   justify-content: space-around;
 }
+.Form-Container {
+  background: #071248;
+  width: 70%;
+  padding: 25px;
+  margin: 25px auto;
+  text-align: center;
+}
+.Form-Container h1 {
+  color: white;
+  text-align: center;
+}
+.input-field {
+  width: 100%;
+  height: 25px;
+  padding: 25px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 8px;
+}
+.Btn {
+  text-transform: uppercase;
+}
+.Thankyou-container{
+  margin: 25px;
+  padding: 25px;
+}
+.Thankyou-container h1{
+  text-align: center;
+}
+.info{
+  display: inline-block;
+  margin-top: 25px;
+}
 .App {
   text-align: center;
 }

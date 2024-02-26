@@ -1,24 +1,26 @@
 import React, { useState, useContext } from 'react'
 import logo from '../images/logo.png'
 import searchLogo from '../images/search-icon.png'
+import CartLogo from '../images/cart.png'
 import { Link } from 'react-router-dom'
 import { MyContext } from '../MyContext'
 
 
-export default function Header({prodToSearch}) {
+export default function Header() {
+  const {cartProduct, data, setData}= useContext(MyContext)
   const [toSearch, setToSearch]= useState('')
-  const handelSearch = (e)=>{
-    //console.log(toSearch)
-    prodToSearch(toSearch)
+  const handelSearch = ()=>{
+    const filterData = toSearch.length === 0 ? JSON.parse(localStorage.getItem('data')) : data.filter((value,i)=> value.title.includes(toSearch)||value.brand.includes(toSearch))
+    setData(filterData)
   }
-  const {cartProduct}= useContext(MyContext)
+  
   return (
     <>
-      <div class="nav-container">
+      <div className="nav-container">
           <img src={logo} alt="logo"/>
-          <nav class="menu-bar">
+          <nav className="menu-bar">
             <ul>
-              <Link to={'/'}>
+              <Link to={'/'} onClick={()=>setData(JSON.parse(localStorage.getItem('data')))}>
                 <li>Home</li>
               </Link>
               <Link>
@@ -32,14 +34,15 @@ export default function Header({prodToSearch}) {
               </Link>
             </ul>
           </nav>
-          <div class="search-container">
-            <input class="input" type="text" value={toSearch} onChange={(e) => setToSearch(e.target.value)} placeholder='Search..'/>
-            <div class="search-icon-div">
-              <img src={searchLogo} alt="Search Icon" onClick={(e)=> handelSearch(e)}/>
+          <div className="search-container">
+            <input className="input" type="text" value={toSearch} onChange={(e) => setToSearch(e.target.value)} placeholder='Search..'/>
+            <div className="search-icon-div">
+              <img src={searchLogo} alt="Search Icon" onClick={()=> handelSearch()}/>
             </div>
           </div>
-          <Link to={'/CartProduct'}>
-          <div style={{color:'white'}}>Cart <span>{cartProduct.length}</span></div>
+          <Link to={'/CartProduct'} style={{textDecoration:'none'}}>
+          <div style={{color:'white'}}>
+            <img src={CartLogo} alt="Cart Logo" style={{width:'30px', height:'30px', color:'white'}}/><span>{cartProduct.length}</span></div>
           </Link>
         </div>
     </>

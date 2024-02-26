@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import Header from '../Common/Header'
+import { MyContext } from '../MyContext'
 
-export default function ProductCard({data}) {
+
+export default function ProductCard() {
+  const {data} = useContext(MyContext)
 
   return (
       <>
         <div className="App">
           {data?.map((v,i)=>(
-            <div class="card">
-              <div class="img-container">
-                <img class="card-img-top" src={v.thumbnail} alt="Card image"/>
+            <div className="card">
+              <div className="img-container">
+                <img className="card-img-top" src={v.thumbnail} alt="Card"/>
               </div>
-              <div class="card-body">
-                <h3 class="card-title">{v.brand}</h3>
-                <h4 class="card-title">{v.title}</h4>
-                <p class="card-text"><span>Acutal Price : Rs. </span>{v.price}</p>
-                <p class="card-text"><span>Discounted Price : Rs. </span>{Math.round((v.price-((v.price*v.discountPercentage)/100))*100)/100}</p>
-                <Link to={`/ProductDetails/${i}`}>
-                  <button class="btn btn-primary">Show Details</button>
+              <div className="card-body">
+                <h3 className="card-title">{v.brand}</h3>
+                <h4 className="card-title">{v.title}</h4>
+                <p className="card-text"><span>Acutal Price : Rs. </span>{v.price}</p>
+                <p className="card-text"><span>Discounted Price : Rs. </span>{v.discountedPrice}</p>
+                <Link to={`/ProductDetails/${v.id}`}>
+                  <button className="btn btn-primary">Show Details</button>
                 </Link>
               </div>
             </div>
